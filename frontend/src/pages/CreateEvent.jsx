@@ -14,54 +14,52 @@ function CreateEvent() {
   const [description, setDescription] = useState("");
   const [allocatedBudget, setBudget] = useState("");
 
-  const stored = localStorage.getItem("user");
-  const user = stored ? JSON.parse(stored).user : null;
+const stored = localStorage.getItem("user");
+const parsed = stored ? JSON.parse(stored) : null;
+
+// 🔥 handle both formats
+const user = parsed?.user || parsed;
 
   const handleCreateEvent = async () => {
-    try {
-      let res;
+  try {
+    let res;
 
-      if (parentId) {
-        // 🔥 CORRECT SUB EVENT ROUTE
-        console.log("PARENT ID:", parentId);
-        res = await API.post(`/events/${parentId}/create-sub-event`, {
-          eventName,
-          eventDate,
-          venue,
-          description,
-          allocatedBudget: Number(allocatedBudget),
-          userId: user._id,
-        });
-      } else {
-        // 🔥 NORMAL EVENT
-        res = await API.post("/events/create", {
-          eventName,
-          eventDate,
-          venue,
-          description,
-          allocatedBudget: Number(allocatedBudget),
-          userId: user._id,
-        });
-      }
-
-      alert("Event created successfully 🎉");
-
-      // 🔥 SMART REDIRECT
-      if (parentId) {
-        navigate(`/event/${parentId}`);
-      } else {
-        navigate("/dashboard");
-      }
-
-    } catch (error) {
-      console.log("FULL ERROR:", error);
-      console.log("RESPONSE:", error.response);
-      console.log("DATA:", error.response?.data);
-      alert(error.response?.data?.message || "Error creating event");
+    if (parentId) {
+      // 🔥 SUB EVENT
+      res = await API.post(`/events/${parentId}/create-sub-event`, {
+        eventName,
+        eventDate,
+        venue,
+        description,
+        allocatedBudget: Number(allocatedBudget),
+        userId: user._id,
+      });
+    } else {
+      // 🔥 NORMAL EVENT
+      res = await API.post("/events/create", {
+        eventName,
+        eventDate,
+        venue,
+        description,
+        allocatedBudget: Number(allocatedBudget),
+        userId: user._id,
+      });
     }
-  };
-  console.log("USER ID:", user._id);
 
+    alert("Event created successfully 🎉");
+
+    // 🔥 IMPORTANT REDIRECT
+    if (parentId) {
+      navigate(`/event/${parentId}`);
+    } else {
+      navigate("/dashboard");
+    }
+
+  } catch (error) {
+    console.log("ERROR:", error.response?.data || error);
+    alert(error.response?.data?.error || "Error creating event");
+  }
+};
   if (!user) {
     return <h1 className="text-white text-center mt-10">Login first</h1>;
   }
@@ -130,7 +128,12 @@ function CreateEvent() {
           >
             Cancel
           </button>
-
+<button
+  onClick={() => navigate("/dashboard")}
+  className="mb-4 bg-gray-800 px-3 py-2 rounded"
+>
+  ← Back to Dashboard
+</button>
         </div>
 
       </div>

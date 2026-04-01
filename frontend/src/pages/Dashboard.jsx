@@ -10,7 +10,6 @@ function Dashboard() {
 
   const [events, setEvents] = useState([]);
   const [eventCode, setEventCode] = useState("");
-
   useEffect(() => {
     if (user?._id) fetchEvents();
   }, [user]);

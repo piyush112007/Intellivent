@@ -3,92 +3,61 @@ const User = require("../models/user");
 const BudgetCollection = require("../models/BudgetCollection");
 
 const createEvent = async (req, res) => {
-  const session = await Event.startSession();
-  session.startTransaction();
-
   try {
-
     const { eventName, eventDate, venue, description, allocatedBudget, userId } = req.body;
 
-    // 1. Create Event
-    const event = new Event({
+    const event = await Event.create({
       eventName,
       eventDate,
       venue,
       description,
-      allocatedBudget
+      allocatedBudget: Number(allocatedBudget),
+      createdBy: userId,
+      subEvents: [],
     });
 
-    await event.save({ session });
-
-    // 2. Create Budget Collection
-    const budgetCollection = new BudgetCollection({
+    const budgetCollection = await BudgetCollection.create({
       eventId: event._id,
-      transactions: []
+      allocatedBudget: Number(allocatedBudget), // 🔥 IMPORTANT
+      expenses: [],
     });
 
-    await budgetCollection.save({ session });
-
-    // 3. Link Budget to Event
     event.budgetCollectionId = budgetCollection._id;
-    await event.save({ session });
+    await event.save();
 
-    // 4. Link Event to User (IMPORTANT PART)
-    const user = await User.findById(userId).session(session);
-
-    if (!user) {
-      throw new Error("User not found");
+    const user = await User.findById(userId);
+    if (user) {
+      user.events.push(event._id);
+      await user.save();
     }
 
-    user.events.push(event._id);
-    await user.save({ session });
-
-    // ✅ Commit transaction
-    await session.commitTransaction();
-    session.endSession();
-
-    res.json({
-      message: "Event created and linked to user successfully",
-      event
-    });
+    res.json({ event });
 
   } catch (error) {
-
-    // ❌ Rollback everything
-    await session.abortTransaction();
-    session.endSession();
-
     res.status(500).json({ error: error.message });
   }
 };
 const createSubEvent = async (req, res) => {
   try {
     const { eventId } = req.params;
-    const { eventName, userId, allocatedBudget, eventDate, venue, description } = req.body;
 
-    // 1️⃣ Find parent + budget
-    const parentEvent = await Event.findById(eventId).populate("budgetCollectionId");
+    const {
+      eventName,
+      eventDate,
+      venue,
+      description,
+      allocatedBudget,
+      userId,
+    } = req.body;
+
+    // 1️⃣ Find parent
+    const parentEvent = await Event.findById(eventId);
 
     if (!parentEvent) {
-      return res.status(404).json({ error: "Parent not found" });
+      return res.status(404).json({ error: "Parent event not found" });
     }
 
-    const budget = parentEvent.budgetCollectionId;
-
-    if (!budget) {
-      return res.status(400).json({ error: "No budget found" });
-    }
-
-    // 2️⃣ Calculate remaining
-    const spent = budget.expenses.reduce((sum, e) => sum + e.amount, 0);
-    const remaining = budget.allocatedBudget - spent;
-
-    // 3️⃣ Check budget
-    if (Number(allocatedBudget) > remaining) {
-      return res.status(400).json({ error: "Not enough budget" });
-    }
-
-    // 4️⃣ Create sub-event
+    // 2️⃣ Create sub-event
     const newEvent = await Event.create({
       eventName,
       eventDate,
@@ -96,31 +65,85 @@ const createSubEvent = async (req, res) => {
       description,
       allocatedBudget: Number(allocatedBudget),
       createdBy: userId,
+      subEvents: [],
     });
 
-    // 5️⃣ Link to parent
+    // 3️⃣ Create its own budget collection
+    const newBudget = await BudgetCollection.create({
+      eventId: newEvent._id,
+      allocatedBudget: Number(allocatedBudget),
+      expenses: [],
+    });
+
+    // 4️⃣ Link budget to sub-event
+    newEvent.budgetCollectionId = newBudget._id;
+    await newEvent.save();
+
+    // 5️⃣ Link sub-event to parent
     parentEvent.subEvents.push(newEvent._id);
     await parentEvent.save();
 
-    // 🔥 6️⃣ ADD EXPENSE (THIS IS THE "SUBTRACTION")
-    budget.expenses.push({
-      amount: Number(allocatedBudget),
-      description: `Allocated to sub-event: ${eventName}`,
-      date: new Date(),
-    });
-
-    await budget.save();
-
-    res.json({
-      message: "Sub event created with budget allocation",
+    res.status(201).json({
+      message: "Sub event created successfully",
       event: newEvent,
     });
 
   } catch (error) {
-    console.log(error);
+    console.log("CREATE SUB EVENT ERROR:", error);
     res.status(500).json({ error: error.message });
   }
-};const addVolunteer = async (req, res) => {
+};
+const addSubEvent = async (req, res) => {
+  try {
+    const { eventId } = req.params;        // parent
+    const { subEventId } = req.body;       // existing event
+
+    // 1️⃣ Validate IDs
+    if (!subEventId) {
+      return res.status(400).json({ error: "Sub event ID required" });
+    }
+
+    if (eventId === subEventId) {
+      return res.status(400).json({ error: "Cannot add event to itself" });
+    }
+
+    // 2️⃣ Find parent + sub event
+    const parentEvent = await Event.findById(eventId);
+    const subEvent = await Event.findById(subEventId);
+
+    if (!parentEvent) {
+      return res.status(404).json({ error: "Parent event not found" });
+    }
+
+    if (!subEvent) {
+      return res.status(404).json({ error: "Sub event not found" });
+    }
+
+    // 3️⃣ Prevent duplicates
+    if (parentEvent.subEvents.includes(subEventId)) {
+      return res.status(400).json({ error: "Sub-event already added" });
+    }
+
+    // 4️⃣ Prevent circular nesting (important 🔥)
+    if (subEvent.subEvents.includes(eventId)) {
+      return res.status(400).json({ error: "Circular reference not allowed" });
+    }
+
+    // 5️⃣ Add sub-event
+    parentEvent.subEvents.push(subEventId);
+    await parentEvent.save();
+
+    res.json({
+      message: "Sub-event linked successfully",
+      parentEvent,
+    });
+
+  } catch (error) {
+    console.log("ADD SUB EVENT ERROR:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+const addVolunteer = async (req, res) => {
   try {
 
     const { eventId } = req.params;
@@ -319,7 +342,9 @@ const updateEventPlanByHeading = async (req, res) => {
 };
 const getEventWithSubEvents = async (eventId) => {
 
-  const event = await Event.findById(eventId).lean();
+  const event = await Event.findById(eventId)
+  .populate("budgetCollectionId")
+  .lean();
 
   if (!event) return null;
 
@@ -401,12 +426,8 @@ const getEventSummary = async (req, res) => {
       error: error.message
     });
   }
+  
 };
-await User.findByIdAndUpdate(
-  userId,
-  { $addToSet: { events: newEvent._id } },
-  { new: true }
-);
 const getUserEvents = async (req, res) => {
   try {
 
