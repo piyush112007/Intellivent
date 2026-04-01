@@ -286,9 +286,12 @@ if (!headingRegex.test(heading)) {
 };
 const addMultipleEventPlans = async (req, res) => {
   try {
-
     const { eventId } = req.params;
     const { plans } = req.body;
+
+    if (!plans || !Array.isArray(plans)) {
+      return res.status(400).json({ message: "Plans must be an array" });
+    }
 
     const event = await Event.findById(eventId);
 
@@ -296,16 +299,23 @@ const addMultipleEventPlans = async (req, res) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    event.eventPlan.push(...plans);
+    // 🔥 SAFE PUSH
+    plans.forEach(plan => {
+      event.eventPlan.push({
+        heading: plan.heading,
+        body: plan.body
+      });
+    });
 
     await event.save();
 
     res.json({
-      message: "Event plans added successfully",
+      message: "Multiple plans added successfully",
       event
     });
 
   } catch (error) {
+    console.log("MULTIPLE PLAN ERROR:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -551,6 +561,31 @@ const deleteEvent = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const deleteVolunteer = async (req, res) => {
+  console.log("DELETE HIT");
+  try {
+    const { eventId, index } = req.params;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // remove by index
+    event.volunteers.splice(index, 1);
+
+    await event.save();
+
+    res.json({
+      message: "Volunteer removed",
+      event,
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 module.exports = {
   createEvent,
   addVolunteer,
@@ -567,5 +602,6 @@ module.exports = {
   getUserEvents,
   shareEventAccess,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  deleteVolunteer
 };

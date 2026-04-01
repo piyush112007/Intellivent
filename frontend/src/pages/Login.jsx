@@ -1,7 +1,35 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import API from "../services/api";
 
 function Login() {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      const res = await API.post("/auth/login", {
+        email,
+        password,
+      });
+
+      // 🔥 SAVE USER (MOST IMPORTANT)
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ user: res.data.user })
+      );
+
+      console.log("LOGGED IN USER:", res.data.user);
+
+      navigate("/dashboard");
+
+    } catch (err) {
+      console.log(err);
+      alert("Login failed");
+    }
+  };
 
   return (
     <div
@@ -24,17 +52,21 @@ function Login() {
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg"
           />
 
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg"
           />
 
           <button
-            onClick={() => navigate("/dashboard")}
+            onClick={handleLogin}
             className="w-full bg-orange-600 py-3 rounded-lg hover:bg-orange-700 transition"
           >
             Login

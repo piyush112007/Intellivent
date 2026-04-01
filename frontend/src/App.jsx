@@ -5,6 +5,9 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import CreateEvent from "./pages/CreateEvent";
 import EventDetails from "./pages/EventDetails";
+import VolunteerDashboard from "./pages/VolunteerDashboard"
+import BudgetDashboard from "./pages/BudgetDashboard"
+import EventPlanDashboard from "./pages/EventPlanDashboard"
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-event" element={<CreateEvent />} />
         <Route path="/event/:id" element={<EventDetails />} />
+        <Route path="/event/:id/volunteers" element={<VolunteerDashboard />} />
+        <Route path="/event/:id/budget" element={<BudgetDashboard />} />
+        <Route path="/event/:id/plan" element={<EventPlanDashboard />} />
       </Routes>
     </BrowserRouter>
   );
