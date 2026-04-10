@@ -12,34 +12,43 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    try {
-      setLoading(true);
-      setError("");
+  try {
+    setLoading(true);
+    setError("");
 
-      const res = await API.post("/auth/login", {
-        email,
-        password,
-      });
+    const res = await API.post("/auth/login", {
+      email,
+      password,
+    });
 
-      // 🔥 SAVE AUTH DATA
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+    console.log("LOGIN RESPONSE:", res.data);
 
-      console.log("LOGGED IN USER:", res.data.user);
+    const user = res.data.user;
 
+
+   
+
+    localStorage.setItem("user", JSON.stringify(user));
+
+ 
+
+    // 🔥 DELAY NAVIGATION (IMPORTANT FIX)
+    setTimeout(() => {
       navigate("/dashboard");
-    } catch (err) {
-      console.log(err);
+    }, 100);
 
-      const message =
-        err.response?.data?.message ||
-        "Invalid credentials. Please try again.";
+  } catch (err) {
+    console.log(err);
 
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const message =
+      err.response?.data?.message ||
+      "Invalid credentials. Please try again.";
+
+    setError(message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div
@@ -82,9 +91,7 @@ function Login() {
           />
 
           {/* ERROR MESSAGE */}
-          {error && (
-            <p className="text-red-400 text-sm text-center">{error}</p>
-          )}
+          {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
           {/* LOGIN BUTTON */}
           <button
