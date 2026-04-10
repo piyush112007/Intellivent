@@ -18,6 +18,10 @@ useEffect(() => {
   }
 }, []);
 function App() {
+  
+if (!isAuth) {
+  return <Navigate to="/login" />;
+}
   return (
     <BrowserRouter>
       <Routes>

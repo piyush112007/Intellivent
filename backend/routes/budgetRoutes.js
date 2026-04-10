@@ -2,9 +2,7 @@ const express = require("express");
 const router = express.Router();
 const isAuth = localStorage.getItem("token");
 
-if (!isAuth) {
-  return <Navigate to="/login" />;
-}
+
 const { addExpense, getBudgetSummary, deleteExpense } = require("../controllers/budgetController");
 
 router.post("/:eventId/add-expense", addExpense);

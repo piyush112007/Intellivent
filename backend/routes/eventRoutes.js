@@ -2,9 +2,7 @@ const express = require("express");
 const router = express.Router();
 const isAuth = localStorage.getItem("token");
 
-if (!isAuth) {
-  return <Navigate to="/login" />;
-}
+
 const { createEvent, addVolunteer, addMultipleVolunteers,addBudget,addMultipleBudget,addEventPlan,addMultipleEventPlans,updateEventPlanByHeading,getEventFullData,getEventSummary,createSubEvent,addSubEvent,getUserEvents,shareEventAccess, updateEvent, deleteEvent,deleteVolunteer,addImage,deleteImage  } = require("../controllers/eventController");
 
 router.post("/create", createEvent);
