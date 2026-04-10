@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -10,43 +9,21 @@ import VolunteerDashboard from "./pages/VolunteerDashboard"
 import BudgetDashboard from "./pages/BudgetDashboard"
 import EventPlanDashboard from "./pages/EventPlanDashboard"
 import AIDashboard from "./pages/AIDashboard"
-useEffect(() => {
-  const user = localStorage.getItem("user");
 
-  if (user) {
-    setUser(JSON.parse(user));
-  }
-}, []);
 function App() {
-  
-const isAuth = localStorage.getItem("token");
   return (
     <BrowserRouter>
       <Routes>
         <Route path="*" element={<h1>Route Not Found</h1>} />
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={
-            isAuth ? <Dashboard /> : <Navigate to="/login" />
-          } />
-        <Route path="/create-event" element={
-            isAuth ? <CreateEvent /> : <Navigate to="/login" />
-          } />
-        <Route path="/event/:id" element={
-            isAuth ? <EventDetails /> : <Navigate to="/login" />
-          } />
-        <Route path="/event/:id/volunteers" element={
-            isAuth ? <VolunteerDashboard /> : <Navigate to="/login" />
-          } />
-        <Route path="/event/:id/budget" element={
-            isAuth ? <BudgetDashboard /> : <Navigate to="/login" />
-          } />
-        <Route path="/event/:id/plan" element={
-            isAuth ? <EventPlanDashboard /> : <Navigate to="/login" />
-          } />
-        <Route path="/event/:id/ai" element={
-            isAuth ? <AIDashboard /> : <Navigate to="/login" />
-          } />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/create-event" element={<CreateEvent />} />
+        <Route path="/event/:id" element={<EventDetails />} />
+        <Route path="/event/:id/volunteers" element={<VolunteerDashboard />} />
+        <Route path="/event/:id/budget" element={<BudgetDashboard />} />
+        <Route path="/event/:id/plan" element={<EventPlanDashboard />} />
+        <Route path="/event/:id/ai" element={<AIDashboard />} />
       </Routes>
     </BrowserRouter>
   );
