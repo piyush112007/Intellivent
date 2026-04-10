@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -9,7 +10,13 @@ import VolunteerDashboard from "./pages/VolunteerDashboard"
 import BudgetDashboard from "./pages/BudgetDashboard"
 import EventPlanDashboard from "./pages/EventPlanDashboard"
 import AIDashboard from "./pages/AIDashboard"
+useEffect(() => {
+  const user = localStorage.getItem("user");
 
+  if (user) {
+    setUser(JSON.parse(user));
+  }
+}, []);
 function App() {
   return (
     <BrowserRouter>

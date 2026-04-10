@@ -16,15 +16,12 @@ function Login() {
       });
 
       // 🔥 SAVE USER (MOST IMPORTANT)
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ user: res.data.user })
-      );
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
       console.log("LOGGED IN USER:", res.data.user);
 
       navigate("/dashboard");
-
     } catch (err) {
       console.log(err);
       alert("Login failed");
@@ -42,13 +39,11 @@ function Login() {
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
 
       <div className="relative w-full max-w-md bg-gray-900/80 backdrop-blur-md text-white rounded-2xl shadow-xl p-8">
-        
         <h1 className="text-3xl font-bold text-center mb-6 text-orange-600">
           IntelliVent
         </h1>
 
         <div className="space-y-4">
-          
           <input
             type="email"
             placeholder="Email"
@@ -82,7 +77,6 @@ function Login() {
             Signup
           </span>
         </p>
-
       </div>
     </div>
   );
