@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const isAuth = localStorage.getItem("token");
+
 
 
 const { addExpense, getBudgetSummary, deleteExpense } = require("../controllers/budgetController");
