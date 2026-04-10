@@ -586,6 +586,60 @@ const deleteVolunteer = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const addImage = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const { image } = req.body;
+
+    const event = await Event.findById(eventId);
+    if (!image || image.trim() === "") {
+  return res.status(400).json({ message: "Invalid image" });
+}
+
+event.images = event.images || [];
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // 🔥 LIMIT 2 IMAGES
+    if (event.images.length >= 2) {
+      return res.status(400).json({ message: "Max 2 images allowed" });
+    }
+
+    event.images.push(image);
+    await event.save();
+
+    res.json({
+      message: "Image added",
+      event
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+const deleteImage = async (req, res) => {
+  try {
+    const { eventId, index } = req.params;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    event.images.splice(index, 1);
+
+    await event.save();
+
+    res.json({ message: "Image deleted", event });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err.message });
+  }
+};
 module.exports = {
   createEvent,
   addVolunteer,
@@ -603,5 +657,7 @@ module.exports = {
   shareEventAccess,
   updateEvent,
   deleteEvent,
-  deleteVolunteer
+  deleteVolunteer,
+  addImage,
+  deleteImage
 };

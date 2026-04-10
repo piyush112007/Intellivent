@@ -67,7 +67,7 @@ function Login() {
 
           <button
             onClick={handleLogin}
-            className="w-full bg-orange-600 py-3 rounded-lg hover:bg-orange-700 transition"
+            className="w-full bg-orange-600 py-3 rounded-lg hover:cursor-pointer hover:bg-orange-700 transition"
           >
             Login
           </button>

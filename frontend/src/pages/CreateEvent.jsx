@@ -115,7 +115,7 @@ const user = parsed?.user || parsed;
 
           <button
             onClick={handleCreateEvent}
-            className="w-full bg-orange-600 py-3 rounded-lg hover:bg-orange-700 transition"
+            className="w-full bg-orange-600 py-3 rounded-lg hover:bg-orange-700 transition hover:cursor-pointer"
           >
             {parentId ? "Create Sub Event" : "Create Event"}
           </button>
@@ -124,13 +124,13 @@ const user = parsed?.user || parsed;
             onClick={() =>
               parentId ? navigate(`/event/${parentId}`) : navigate("/dashboard")
             }
-            className="w-full border border-gray-700 py-2 rounded-lg hover:bg-gray-800"
+            className="w-full border hover:cursor-pointer border-gray-700 py-2 rounded-lg hover:bg-gray-800"
           >
             Cancel
           </button>
 <button
   onClick={() => navigate("/dashboard")}
-  className="mb-4 bg-gray-800 px-3 py-2 rounded"
+  className="mb-4 bg-gray-800 px-3 py-2 rounded hover:cursor-pointer"
 >
   ← Back to Dashboard
 </button>

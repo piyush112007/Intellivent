@@ -84,7 +84,7 @@ const deleteVolunteer = async (index) => {
 
         <button
           onClick={() => navigate(`/event/${id}`)}
-          className="bg-orange-600 px-4 py-2 rounded"
+          className="bg-orange-600 px-4 py-2 rounded hover:cursor-pointer"
         >
           ← Back
         </button>
@@ -120,14 +120,14 @@ const deleteVolunteer = async (index) => {
         <div className="flex gap-3">
           <button
             onClick={addVolunteer}
-            className="bg-green-600 px-4 py-2 rounded hover:bg-green-700"
+            className="bg-green-600 px-4 py-2 rounded hover:bg-green-700 hover:cursor-pointer"
           >
             Add Volunteer
           </button>
 
           <button
             onClick={addMultiple}
-            className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
+            className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 hover:cursor-pointer"
           >
             Add Sample Multiple
           </button>
@@ -151,7 +151,7 @@ const deleteVolunteer = async (index) => {
       {/* 🔥 DELETE BUTTON */}
       <button
         onClick={() => deleteVolunteer(i)}
-        className="bg-red-600 px-3 py-1 rounded hover:bg-red-700"
+        className="bg-red-600 px-3 py-1 rounded hover:bg-red-700 hover:cursor-pointer"
       >
         Delete
       </button>

@@ -76,7 +76,7 @@ function BudgetDashboard() {
 
         <button
           onClick={() => navigate(`/event/${id}`)}
-          className="bg-orange-600 px-4 py-2 rounded"
+          className="bg-orange-600 px-4 py-2 rounded hover:cursor-pointer"
         >
           ← Back
         </button>
@@ -106,14 +106,14 @@ function BudgetDashboard() {
         <div className="flex gap-3">
           <button
             onClick={addBudget}
-            className="bg-green-600 px-4 py-2 rounded hover:bg-green-700"
+            className="bg-green-600 px-4 py-2 rounded hover:bg-green-700 hover:cursor-pointer"
           >
             Add Expense
           </button>
 
           <button
             onClick={addMultiple}
-            className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
+            className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 hover:cursor-pointer"
           >
             Add Sample Multiple
           </button>

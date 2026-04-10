@@ -50,7 +50,7 @@ budgetCollectionId: {
   budget: [budgetSchema],
 
   eventPlan: [eventPlanSchema],
-
+  images: [String],
   createdAt: {
     type: Date,
     default: Date.now

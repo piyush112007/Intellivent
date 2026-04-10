@@ -11,6 +11,9 @@ function Dashboard() {
   const [events, setEvents] = useState([]);
   const [eventCode, setEventCode] = useState("");
   useEffect(() => {
+    if (!user) {
+    navigate("/");
+  }
     if (user?._id) fetchEvents();
   }, [user]);
 
@@ -83,7 +86,7 @@ function Dashboard() {
 
           <button
             onClick={handleJoinEvent}
-            className="bg-purple-600 px-5 py-3 rounded-lg hover:bg-purple-700 transition"
+            className="bg-orange-600 px-5 py-3 rounded-lg hover:bg-orange-700 transition"
           >
             Join
           </button>
@@ -97,6 +100,9 @@ function Dashboard() {
         <h2 className="text-xl font-semibold mb-6">
           Your Events
         </h2>
+        <p className="text-gray-400 mb-5">
+  Total Events: {events.length}
+</p>
 
         {events.length === 0 ? (
           <div className="bg-gray-900 p-8 rounded-xl text-center text-gray-400 border border-gray-800">

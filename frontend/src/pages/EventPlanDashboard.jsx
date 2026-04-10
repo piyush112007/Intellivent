@@ -87,7 +87,7 @@ function EventPlanDashboard() {
       <div className="flex gap-3 mb-6">
         <button
           onClick={() => setMode("add")}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded hover:cursor-pointer ${
             mode === "add" ? "bg-blue-600" : "bg-gray-700"
           }`}
         >
@@ -96,7 +96,7 @@ function EventPlanDashboard() {
 
         <button
           onClick={() => setMode("edit")}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded hover:cursor-pointer${
             mode === "edit" ? "bg-blue-600" : "bg-gray-700"
           }`}
         >
@@ -125,7 +125,7 @@ function EventPlanDashboard() {
 
           <button
             onClick={addPlan}
-            className="bg-orange-600 px-4 py-2 rounded hover:bg-orange-700"
+            className="bg-orange-600 px-4 py-2 rounded hover:cursor-pointer hover:bg-orange-700"
           >
             Add Plan
           </button>
@@ -153,7 +153,7 @@ function EventPlanDashboard() {
 
           <button
             onClick={updatePlan}
-            className="bg-orange-600 px-4 py-2 rounded hover:bg-orange-700"
+            className="bg-orange-600 px-4 py-2 rounded hover:cursor-pointer hover:bg-orange-700"
           >
             Update Plan
           </button>
@@ -185,7 +185,7 @@ function EventPlanDashboard() {
                   setEditHeading(plan.heading);
                   setEditBody(plan.body);
                 }}
-                className="bg-orange-600 px-3 py-1 rounded hover:bg-orange-700"
+                className="bg-orange-600 px-3 py-1 rounded hover:cursor-pointer hover:bg-orange-700"
               >
                 Edit
               </button>

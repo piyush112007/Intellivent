@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { createEvent, addVolunteer, addMultipleVolunteers,addBudget,addMultipleBudget,addEventPlan,addMultipleEventPlans,updateEventPlanByHeading,getEventFullData,getEventSummary,createSubEvent,addSubEvent,getUserEvents,shareEventAccess, updateEvent, deleteEvent,deleteVolunteer  } = require("../controllers/eventController");
+const { createEvent, addVolunteer, addMultipleVolunteers,addBudget,addMultipleBudget,addEventPlan,addMultipleEventPlans,updateEventPlanByHeading,getEventFullData,getEventSummary,createSubEvent,addSubEvent,getUserEvents,shareEventAccess, updateEvent, deleteEvent,deleteVolunteer,addImage,deleteImage  } = require("../controllers/eventController");
 
 router.post("/create", createEvent);
 router.post("/:eventId/volunteers", addMultipleVolunteers);
@@ -20,5 +20,7 @@ router.post("/share-event", shareEventAccess);
 router.put("/:eventId", updateEvent);
 router.delete("/:eventId", deleteEvent);
 router.delete("/:eventId/volunteer/:index", deleteVolunteer);
+router.post("/:eventId/image", addImage);
+router.delete("/:eventId/image/:index", deleteImage);
 
 module.exports = router;
