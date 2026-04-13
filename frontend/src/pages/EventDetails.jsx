@@ -44,7 +44,7 @@ function EventDetails() {
   const totalSpent = event?.budget?.reduce((sum, b) => sum + b.amount, 0) || 0;
 
   const remaining = (event?.allocatedBudget || 0) - totalSpent;
-
+const totalVolunteers = event?.volunteers?.length || 0;
   // 🔥 COPY
   const copyEventId = () => {
     navigator.clipboard.writeText(event._id);
@@ -192,15 +192,30 @@ function EventDetails() {
 
         {/* VOLUNTEERS */}
         <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-          <h2 className="text-xl font-semibold mb-4">Volunteers</h2>
+  <h2 className="text-xl font-semibold mb-4">Volunteers</h2>
 
-          <button
-            onClick={() => navigate(`/event/${id}/volunteers`)}
-            className="bg-orange-600 px-4 py-2 rounded hover:bg-orange-700"
-          >
-            Manage Volunteers
-          </button>
-        </div>
+  <div className="flex items-center justify-between">
+    
+    {/* 🔥 LEFT SIDE (COUNT) */}
+    <div>
+      <p className="text-gray-300">
+        Total Volunteers:{" "}
+        <span className="text-green-400 font-semibold">
+          {totalVolunteers}
+        </span>
+      </p>
+    </div>
+
+    {/* 🔥 RIGHT SIDE BUTTON */}
+    <button
+      onClick={() => navigate(`/event/${id}/volunteers`)}
+      className="bg-orange-600 px-4 py-2 rounded hover:bg-orange-700"
+    >
+      Manage Volunteers
+    </button>
+
+  </div>
+</div>
 
         {/* EVENT PLAN */}
         <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800">
