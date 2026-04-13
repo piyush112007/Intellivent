@@ -8,28 +8,47 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const handleLogin = async () => {
-    try {
-      const res = await API.post("/auth/login", {
-        email,
-        password,
-      });
+  try {
+    setLoading(true);
+    setError("");
 
-      // 🔥 SAVE USER (MOST IMPORTANT)
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ user: res.data.user })
-      );
+    const res = await API.post("/auth/login", {
+      email,
+      password,
+    });
 
-      console.log("LOGGED IN USER:", res.data.user);
+    console.log("LOGIN RESPONSE:", res.data);
 
+    const user = res.data.user;
+
+
+   
+
+    localStorage.setItem("user", JSON.stringify(user));
+
+ 
+
+    // 🔥 DELAY NAVIGATION (IMPORTANT FIX)
+    setTimeout(() => {
       navigate("/dashboard");
+    }, 100);
 
-    } catch (err) {
-      console.log(err);
-      alert("Login failed");
-    }
-  };
+  } catch (err) {
+    console.log(err);
+
+    const message =
+      err.response?.data?.message ||
+      "Invalid credentials. Please try again.";
+
+    setError(message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div
@@ -42,47 +61,62 @@ function Login() {
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
 
       <div className="relative w-full max-w-md bg-gray-900/80 backdrop-blur-md text-white rounded-2xl shadow-xl p-8">
-        
         <h1 className="text-3xl font-bold text-center mb-6 text-orange-600">
           IntelliVent
         </h1>
 
         <div className="space-y-4">
-          
+          {/* EMAIL */}
           <input
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError("");
+            }}
+            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
 
+          {/* PASSWORD */}
           <input
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg"
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError("");
+            }}
+            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
 
+          {/* ERROR MESSAGE */}
+          {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+
+          {/* LOGIN BUTTON */}
           <button
             onClick={handleLogin}
-            className="w-full bg-orange-600 py-3 rounded-lg hover:cursor-pointer hover:bg-orange-700 transition"
+            disabled={loading}
+            className={`w-full py-3 rounded-lg transition ${
+              loading
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-orange-600 hover:bg-orange-700"
+            }`}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </div>
 
+        {/* SIGNUP */}
         <p className="text-sm text-center mt-6 text-gray-400">
           Don’t have an account?{" "}
           <span
             onClick={() => navigate("/signup")}
-            className="text-blue-400 cursor-pointer"
+            className="text-blue-400 cursor-pointer hover:underline"
           >
             Signup
           </span>
         </p>
-
       </div>
     </div>
   );

@@ -21,7 +21,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors());
+app.use(cors({
+  origin:["https://intellivent.vercel.app/","http://localhost:5173"],
+  credentials:true
+}));
 app.use(express.json());
 app.use("/api/ai", aiRoutes);
 
