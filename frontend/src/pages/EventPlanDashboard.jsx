@@ -88,7 +88,7 @@ function EventPlanDashboard() {
         <button
           onClick={() => setMode("add")}
           className={`px-4 py-2 rounded hover:cursor-pointer ${
-            mode === "add" ? "bg-blue-600" : "bg-gray-700"
+            mode === "add" ? "bg-orange-600" : "bg-gray-700"
           }`}
         >
           Add Plan
@@ -96,8 +96,8 @@ function EventPlanDashboard() {
 
         <button
           onClick={() => setMode("edit")}
-          className={`px-4 py-2 rounded hover:cursor-pointer${
-            mode === "edit" ? "bg-blue-600" : "bg-gray-700"
+          className={`px-4 py-2 rounded hover:cursor-pointer ${
+            mode === "edit" ? "bg-orange-600" : "bg-gray-700"
           }`}
         >
           Edit Plan
