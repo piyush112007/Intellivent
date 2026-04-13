@@ -2,13 +2,19 @@ const axios = require("axios");
 
 // 🔥 MULTI-MODEL FALLBACK
 const models = [
+  "openrouter/elephant-alpha",
   "qwen/qwen3.6-plus:free",
+  "nvidia/nemotron-nano-12b-v2-vl:free",
   "stepfun/step-3.5-flash:free",
+  "nvidia/nemotron-3-super-120b-a12b:free",
+  "liquid/lfm-2.5-1.2b-instruct:free",
   "liquid/lfm-2.5-1.2b-thinking:free",
+  "nvidia/llama-nemotron-embed-vl-1b-v2:free",
   "arcee-ai/trinity-large-preview:free",
   "arcee-ai/trinity-mini:free",
+  "google/gemma-4-26b-a4b-it:free",
+  "google/gemma-4-31b-it:free",
   "minimax/minimax-m2.5:free",
-
 ];
 
 const generateAIText = async (req, res) => {

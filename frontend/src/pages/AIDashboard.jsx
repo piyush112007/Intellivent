@@ -11,10 +11,36 @@ function AIDashboard() {
   const [event, setEvent] = useState(null);
   const [overview, setOverview] = useState("");
   const [conclusion, setConclusion] = useState("");
-
+  const [progress, setProgress] = useState(0);
+  const [currentStep, setCurrentStep] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [loadingOverview, setLoadingOverview] = useState(false);
   const [loadingConclusion, setLoadingConclusion] = useState(false);
   const [loadingPDF, setLoadingPDF] = useState(false);
+  const [typedOverview, setTypedOverview] = useState("");
+  const [typedConclusion, setTypedConclusion] = useState("");
+  const [copiedText, setCopiedText] = useState("");
+
+const handleCopy = (text, type) => {
+  navigator.clipboard.writeText(text);
+  setCopiedText(type);
+
+  setTimeout(() => setCopiedText(""), 1500);
+};
+  const typeText = (text, setter, speed = 20) => {
+    let index = 0;
+
+    setter(""); // reset
+
+    const interval = setInterval(() => {
+      setter(text.slice(0, index + 1)); // ✅ FIX HERE
+      index++;
+
+      if (index >= text.length) {
+        clearInterval(interval);
+      }
+    }, speed);
+  };
 
   // 🔥 TOGGLE (IMPORTANT)
   const USE_MOCK = false;
@@ -120,38 +146,58 @@ Participants actively engaged in all activities, and the event achieved its obje
   // 🔥 OVERVIEW BUTTON
   const generateOverview = async () => {
     setLoadingOverview(true);
+    setTypedOverview(""); // reset
+
+    let result = "";
 
     if (USE_MOCK) {
-      setOverview(mockOverview);
+      result = mockOverview;
     } else {
       const res = await API.post(`/ai/generate`, {
         type: "overview",
         eventName: event.eventName,
         description: event.description,
       });
-      setOverview(res.data.text);
+
+      result = res.data.text;
     }
 
     setLoadingOverview(false);
+
+    // 🔥 START TYPING EFFECT
+    typeText(result, setTypedOverview, 15);
   };
 
   // 🔥 CONCLUSION BUTTON
   const generateConclusion = async () => {
     setLoadingConclusion(true);
+    setTypedConclusion("");
+
+    let result = "";
 
     if (USE_MOCK) {
-      setConclusion(mockConclusion);
+      result = mockConclusion;
     } else {
       const res = await API.post(`/ai/generate`, {
         type: "conclusion",
         eventName: event.eventName,
         description: event.description,
       });
-      setConclusion(res.data.text);
+
+      result = res.data.text;
     }
 
     setLoadingConclusion(false);
+
+    typeText(result, setTypedConclusion, 15);
   };
+  const ThinkingDots = () => (
+    <div className="flex gap-1">
+      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150"></div>
+      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-300"></div>
+    </div>
+  );
   const generateSubEventOverview = async (sub) => {
     try {
       const res = await API.post("/ai/generate", {
@@ -194,7 +240,9 @@ Participants actively engaged in all activities, and the event achieved its obje
   const generatePDF = async () => {
     try {
       setLoadingPDF(true);
-
+      setErrorMsg("");
+      setCurrentStep("Generating Event Overview...");
+      setProgress(10);
       let overviewText, conclusionText;
 
       if (USE_MOCK) {
@@ -206,6 +254,9 @@ Participants actively engaged in all activities, and the event achieved its obje
           eventName: event.eventName,
           description: event.description,
         });
+        overviewText = overviewRes.data.text;
+        setCurrentStep("Generating Conclusion...");
+        setProgress(25);
 
         const conclusionRes = await API.post(`/ai/generate`, {
           type: "conclusion",
@@ -213,8 +264,9 @@ Participants actively engaged in all activities, and the event achieved its obje
           description: event.description,
         });
 
-        overviewText = overviewRes.data.text;
         conclusionText = conclusionRes.data.text;
+        setCurrentStep("Generating Sub-Event Insights...");
+        setProgress(40);
       }
 
       // 🔥 SUBEVENT DETAILS
@@ -239,7 +291,11 @@ Participants actively engaged in all activities, and the event achieved its obje
           });
         }
       }
+      setCurrentStep("Generating Sub-Event Insights...");
+      setProgress(40);
       const subEventsWithAI = await generateAllSubEventOverviews();
+      setCurrentStep("Preparing Document Layout...");
+      setProgress(60);
 
       const doc = new jsPDF();
       // 🔥 COVER PAGE UPDATED
@@ -314,7 +370,8 @@ Participants actively engaged in all activities, and the event achieved its obje
       });
       addBranding(doc);
       doc.addPage();
-
+      setCurrentStep("Rendering Images & Tables...");
+      setProgress(80);
       // 🔥 NEW PAGE FOR BUDGET
 
       const budgetStartY = section(doc, "Budget Details");
@@ -542,12 +599,31 @@ Participants actively engaged in all activities, and the event achieved its obje
 
       // 🔥 FOOTER
       addBranding(doc);
-      // 🔥 PREVIEW
+      setCurrentStep("Finalizing PDF...");
+      setProgress(95);
+
+      // 🔥 CREATE PDF URL
       const blob = doc.output("blob");
       const url = URL.createObjectURL(blob);
-      window.open(url);
+      // 🔥 PREVIEW
+      setCurrentStep("Completed ✅");
+      setProgress(100);
+
+      setTimeout(() => {
+        window.open(url);
+        setLoadingPDF(false);
+        setProgress(0);
+      }, 500);
     } catch (err) {
       console.log(err);
+
+      setErrorMsg(
+        err?.response?.data?.message ||
+          "PDF generation failed due to API load. Please try again.",
+      );
+
+      setLoadingPDF(false);
+      setProgress(0);
     } finally {
       setLoadingPDF(false);
     }
@@ -591,20 +667,134 @@ Participants actively engaged in all activities, and the event achieved its obje
           </button>
         </div>
 
-        <button
-          onClick={generatePDF}
-          className="bg-purple-600 px-6 py-3 rounded w-full"
-        >
-          {loadingPDF ? "Generating..." : "Generate PDF 🚀"}
-        </button>
+        {loadingPDF ? (
+          <div className="bg-gray-800 p-4 rounded w-full">
+            {/* 🔥 STEP TEXT */}
+            <p className="text-sm text-gray-300 mb-2">{currentStep}</p>
+
+            {/* 🔥 PROGRESS BAR */}
+            <div className="w-full bg-gray-700 h-3 rounded overflow-hidden">
+              <div
+                className="h-3 bg-orange-500 transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={generatePDF}
+            className="bg-orange-600 px-6 py-3 rounded w-full hover:bg-orange-700"
+          >
+            Generate PDF 🚀
+          </button>
+        )}
+        {errorMsg && (
+          <div className="mt-4 bg-red-900/40 border border-red-500 text-red-300 p-3 rounded">
+            ❌ {errorMsg}
+          </div>
+        )}
       </div>
 
       {/* OUTPUT */}
       <div className="mt-6 space-y-4">
-        {overview && <div className="bg-gray-900 p-4 rounded">{overview}</div>}
-        {conclusion && (
-          <div className="bg-gray-900 p-4 rounded">{conclusion}</div>
-        )}
+        {/* OVERVIEW */}
+{(loadingOverview || typedOverview) && (
+  <div className="bg-gray-900 p-4 rounded min-h-[80px] border border-gray-800 relative">
+
+    {/* 🔥 HEADER */}
+    <div className="flex justify-between items-center mb-2">
+      <h3 className="text-green-400 font-semibold">● Overview</h3>
+
+      {!loadingOverview && typedOverview && (
+        <button
+  onClick={() => handleCopy(typedOverview, "overview")}
+  className="relative group p-2 rounded hover:bg-gray-800 transition"
+>
+  {/* TOOLTIP */}
+  <span className="absolute -top-8 right-0 bg-gray-800 text-xs text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
+    {copiedText === "overview" ? "Copied!" : "Copy"}
+  </span>
+
+  {/* CLIPBOARD ICON */}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    className={`w-5 h-5 transition ${
+      copiedText === "overview"
+        ? "text-orange-500"
+        : "text-gray-400 group-hover:text-white"
+    }`}
+  >
+    <rect x="9" y="2" width="6" height="4" rx="1" />
+    <path d="M9 4H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2h-2" />
+  </svg>
+</button>
+      )}
+    </div>
+
+    {/* CONTENT */}
+    {loadingOverview ? (
+      <ThinkingDots />
+    ) : (
+      <p className="whitespace-pre-wrap text-gray-200">
+        {typedOverview}
+        <span className="animate-pulse">|</span>
+      </p>
+    )}
+  </div>
+)}
+        {/* CONCLUSION */}
+{(loadingConclusion || typedConclusion) && (
+  <div className="bg-gray-900 p-4 rounded min-h-[80px] border border-gray-800 relative">
+
+    {/* 🔥 HEADER */}
+    <div className="flex justify-between items-center mb-2">
+      <h3 className="text-blue-400 font-semibold">● Conclusion</h3>
+
+      {!loadingConclusion && typedConclusion && (
+        <button
+  onClick={() => handleCopy(typedConclusion, "conclusion")}
+
+  className="relative group p-2 rounded hover:bg-gray-800 transition"
+>
+  {/* TOOLTIP */}
+  <span className="absolute -top-8 right-0 bg-gray-800 text-xs text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
+    {copiedText === "overview" ? "Copied!" : "Copy"}
+  </span>
+
+  {/* CLIPBOARD ICON */}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    className={`w-5 h-5 transition ${
+      copiedText === "conclusion"
+        ? "text-orange-500"
+        : "text-gray-400 group-hover:text-white"
+    }`}
+  >
+    <rect x="9" y="2" width="6" height="4" rx="1" />
+    <path d="M9 4H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2h-2" />
+  </svg>
+</button>      )}
+    </div>
+
+    {/* CONTENT */}
+    {loadingConclusion ? (
+      <ThinkingDots />
+    ) : (
+      <p className="whitespace-pre-wrap text-gray-200">
+        {typedConclusion}
+        <span className="animate-pulse">|</span>
+      </p>
+    )}
+  </div>
+)}
       </div>
     </div>
   );

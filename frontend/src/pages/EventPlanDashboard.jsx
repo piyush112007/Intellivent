@@ -179,16 +179,18 @@ function EventPlanDashboard() {
                 <p className="text-sm text-gray-300">{plan.body}</p>
               </div>
 
-              <button
-                onClick={() => {
-                  setMode("edit");
-                  setEditHeading(plan.heading);
-                  setEditBody(plan.body);
-                }}
-                className="bg-orange-600 px-3 py-1 rounded hover:cursor-pointer hover:bg-orange-700"
-              >
-                Edit
-              </button>
+              {mode === "edit" && (
+  <button
+    onClick={() => {
+      setMode("edit");
+      setEditHeading(plan.heading);
+      setEditBody(plan.body);
+    }}
+    className="bg-orange-600 px-3 py-1 rounded hover:cursor-pointer hover:bg-orange-700"
+  >
+    Edit
+  </button>
+)}
             </div>
           ))
         )}
