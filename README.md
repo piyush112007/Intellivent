@@ -79,7 +79,7 @@ IntelliVent/
 ### 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/your-username/intellivent.git
+git clone https://github.com/piyush112007/intellivent.git
 cd intellivent
 ```
 
