@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import API from "../services/api";
+import logo from "../assets/logo.png"; 
+
 
 function Login() {
   const navigate = useNavigate();
@@ -43,10 +45,21 @@ function Login() {
 
       <div className="relative w-full max-w-md bg-gray-900/80 backdrop-blur-md text-white rounded-2xl shadow-xl p-8">
         
-        <h1 className="text-3xl font-bold text-center mb-6 text-orange-600">
-          IntelliVent
-        </h1>
+        <div className="flex items-center content-center gap-3 mb-6">
 
+  {/* LOGO */}
+  <img
+    src={logo}
+    alt="IntelliVent Logo"
+    className="w-10 h-10 object-contain"
+  />
+
+  {/* TITLE */}
+  <h1 className="text-3xl font-bold text-orange-500 tracking-wide">
+    IntelliVent
+  </h1>
+
+</div>
         <div className="space-y-4">
           
           <input
