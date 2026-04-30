@@ -43,16 +43,51 @@ const handleCopy = (text, type) => {
   };
 
   // 🔥 TOGGLE (IMPORTANT)
-  const USE_MOCK = false;
+  const USE_MOCK = true;
 
   // 🔥 MOCK DATA
-  const mockOverview = `Tech Fest is a premier college-level event focused on coding and robotics. 
-It provides students with opportunities to participate in competitions, workshops, and collaborative projects. 
-The event encourages innovation, teamwork, and real-world problem solving.`;
+  const mockOverview = `Ignite2k26 is the annual full-day cultural fest of Smt. Indira Gandhi College of Engineering, designed to unite the student community
+in a dynamic celebration of artistic expression and inventive spirit. This premier event showcases a diverse array of student talent through captivating stage performances, challenging competitive events, and numerous hands-on, interactive activities. It serves as a vibrant platform for creativity, encouraging collaboration and lively engagement across various disciplines. From music and dance to literary arts and technical challenges, the fest fosters a holistic environment for personal growth and collective enjoyment.
+Ultimately, Ignite2k26 aims to create an unforgettable experience  that strengthens campus community bonds while highlighting the multifaceted abilities of its participants. The event Ignite2k26 was executed with a well-structured plan and efficient resource management. A dedicated team of volunteers ensured smooth coordination throughout the event. The allocated budget was utilized effectively to meet all logistical requirements. The event
+plan was followed systematically, ensuring timely execution of all activities. Overall, the event was successfully conducted and achieved its intended objectives.`;
 
-  const mockConclusion = `The event was successfully conducted with proper planning and coordination. 
-Participants actively engaged in all activities, and the event achieved its objective of promoting learning and collaboration.`;
-
+  const mockConclusion = `In conclusion, Ignite2k26 successfully achieved its mandate by
+establishing an engaging platform that showcased the exceptional
+talent within Smt. Indira Gandhi College of Engineering. The event
+witnessed robust student participation and yielded outstanding
+competitive outcomes across diverse artistic performances and
+collaborative workshops. These collective efforts substantially
+strengthened institutional camaraderie while providing lasting
+developmental opportunities for every attendee. Ultimately, the
+fest fostered a profound legacy of creative excellence that will
+continue to inspire future academic initiatives and campus
+traditions. In conclusion, the event Ignite2k26 proved to be a
+successful initiative that met its intended objectives. The
+participation, planning, and execution reflected strong
+coordination and teamwork. The event created a valuable platform
+for learning, interaction, and practical exposure. Overall, it left a
+positive impact on all participants and demonstrated effective
+event management.
+`;
+const mocksubeventOverview = `Indoor Ignite operates as a structured segment of Ignite2k26, featuring a curated series of interactive
+competitions designed to enhance collaborative engagement among students. Participants engage in
+carefully organized indoor challenges, including Man vs Food, strategic Treasure Hunt expeditions, and
+precision games such as Jenga. Each activity emphasizes collective problemsolving, creative thinking,
+and sustained participation within a dynamic yet professionally managed venue. The program balances
+competitive structure with recreational interaction, providing a cohesive platform for students to refine
+interpersonal dynamics and demonstrate strategic cooperation. This thoughtfully facilitated series
+ensures seamless execution while advancing the broader developmental objectives of the annual festival.
+The sub-event played a significant role in enhancing participant engagement and interaction. Participants
+gained valuable insights and hands-on experience through this segment.`
+const mockSubEvents = [
+  {
+    _id: "1",
+    eventName: "Indoor Ignite",
+    description: mocksubeventOverview,
+    image: null,
+    images: [],
+  },
+];
   useEffect(() => {
     fetchEvent();
   }, [id]);
@@ -77,12 +112,14 @@ Participants actively engaged in all activities, and the event achieved its obje
       let eventData = res.data.data || res.data;
 
       // 🔥 CHECK IF subEvents are IDs
-      if (eventData.subEvents && typeof eventData.subEvents[0] === "string") {
-        const fullSubEvents = await fetchSubEvents(eventData.subEvents);
-
-        eventData.subEvents = fullSubEvents;
-      }
-
+      if (USE_MOCK) {
+  eventData.subEvents = mockSubEvents;
+} else {
+  if (eventData.subEvents && typeof eventData.subEvents[0] === "string") {
+    const fullSubEvents = await fetchSubEvents(eventData.subEvents);
+    eventData.subEvents = fullSubEvents;
+  }
+}
       setEvent(eventData);
     } catch (err) {
       console.log(err);

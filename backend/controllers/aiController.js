@@ -3,6 +3,10 @@ const axios = require("axios");
 // 🔥 MULTI-MODEL FALLBACK
 const models = [
   "openrouter/elephant-alpha",
+  "google/gemma-3-27b-it:free",
+  "meta-llama/llama-3.3-70b-instruct:free",
+  "meta-llama/llama-3.2-3b-instruct:free",
+  "nousresearch/hermes-3-llama-3.1-405b:free",
   "qwen/qwen3.6-plus:free",
   "nvidia/nemotron-nano-12b-v2-vl:free",
   "stepfun/step-3.5-flash:free",
