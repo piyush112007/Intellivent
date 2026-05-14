@@ -169,7 +169,7 @@ EVENT {
 
 ## 👨‍💻 Team Members
 
-* Janhavi Mishra  – Frontend Developer
+* Janhavi Mishra  – Frontend Developer(https://github.com/Janhavi2126)
 * Piyushkumar Singh  – Backend Developer
 * Hariom Rai  – AI Integration
 
