@@ -1,15 +1,18 @@
 const jwt = require("jsonwebtoken");
 
 const authMiddleware = (req, res, next) => {
+
   try {
 
-    const token = req.cookies.token;
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
-        message: "Not authenticated",
+        message: "No token provided",
       });
     }
+
+    const token = authHeader.split(" ")[1];
 
     const decoded = jwt.verify(
       token,
@@ -20,13 +23,14 @@ const authMiddleware = (req, res, next) => {
 
     next();
 
-  } catch (err) {
+  } catch (error) {
 
-    res.status(401).json({
+    return res.status(401).json({
       message: "Invalid token",
     });
 
   }
+
 };
 
 module.exports = authMiddleware;
