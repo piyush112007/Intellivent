@@ -43,7 +43,7 @@ const handleCopy = (text, type) => {
   };
 
   // 🔥 TOGGLE (IMPORTANT)
-  const USE_MOCK = true;
+  const USE_MOCK = false;
 
   // 🔥 MOCK DATA
   const mockOverview = `Ignite2k26 is the annual full-day cultural fest of Smt. Indira Gandhi College of Engineering, designed to unite the student community
