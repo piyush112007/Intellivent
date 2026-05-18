@@ -98,9 +98,101 @@ const totalVolunteers = event?.volunteers?.length || 0;
     accept: { "image/*": [] },
   });
 
-  if (loading)
-    return <h1 className="text-white text-center mt-10">Loading...</h1>;
+  if (loading) {
+  return (
+    <div className="min-h-screen bg-gray-950 text-white px-4 md:px-10 py-6">
 
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
+
+        <div>
+          <div className="h-8 w-72 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded mb-3"></div>
+
+          <div className="h-4 w-56 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+          <div className="flex gap-3 mt-4">
+
+            <div className="h-8 w-40 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+            <div className="h-10 w-32 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+          </div>
+        </div>
+
+        <div className="flex gap-3">
+
+          <div className="h-10 w-36 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+          <div className="h-10 w-32 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+        </div>
+
+      </div>
+
+      {/* MAIN GRID */}
+      <div className="grid lg:grid-cols-2 gap-6">
+
+        {[1, 2, 3, 4].map((item) => (
+          <div
+            key={item}
+            className="bg-gray-900 p-6 rounded-2xl border border-gray-800"
+          >
+
+            <div className="h-6 w-44 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded mb-6"></div>
+
+            <div className="space-y-4">
+
+              <div className="h-4 w-full bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+              <div className="h-4 w-5/6 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+              <div className="h-10 w-40 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded mt-6"></div>
+
+            </div>
+
+          </div>
+        ))}
+
+      </div>
+
+      {/* IMAGE SECTION */}
+      <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800 mt-6">
+
+        <div className="flex justify-between mb-6">
+
+          <div className="h-6 w-48 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+          <div className="h-5 w-12 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+        </div>
+
+        {/* DROPZONE */}
+        <div className="h-40 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded-xl"></div>
+
+        {/* BUTTON */}
+        <div className="flex justify-end mt-4">
+
+          <div className="h-10 w-28 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+        </div>
+
+        {/* GALLERY */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+
+          {[1, 2].map((img) => (
+            <div
+              key={img}
+              className="h-40 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded-xl"
+            ></div>
+          ))}
+
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
   if (!event)
     return <h1 className="text-white text-center mt-10">No Event Found</h1>;
 
