@@ -9,3 +9,17 @@
     transform: scale(1);
   }
 }
+@keyframes loader {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.animate-loader {
+  animation: loader 1.2s infinite linear;
+  width: 40%;
+}
