@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
+      "http://localhost:5173/",
       "https://intellivent.vercel.app/"
     ],
     credentials: true,
@@ -43,6 +43,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/budget", budgetRoutes);
 
-const PORT = 5000;
+// const PORT = 5000;
+// app.listen(PORT, () => {
+//   console.log("running");
+// });  //For Local Testing
 
-export default app;
+export default app; // For Global Deployment

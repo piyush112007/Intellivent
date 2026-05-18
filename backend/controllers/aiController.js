@@ -2,6 +2,10 @@ const axios = require("axios");
 
 // 🔥 MULTI-MODEL FALLBACK
 const models = [
+  "deepseek/deepseek-v4-flash:free",
+  "baidu/cobuddy:free",
+  "openrouter/owl-alpha",
+  "nvidia/nemotron-3-super-120b-a12b:free",
   "openrouter/elephant-alpha",
   "google/gemma-3-27b-it:free",
   "meta-llama/llama-3.3-70b-instruct:free",
