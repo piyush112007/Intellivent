@@ -64,8 +64,74 @@ useEffect(() => {
     }
   };
 
-  if (loading)
-    return <h1 className="text-white text-center mt-10">Loading...</h1>;
+  if (loading) {
+  return (
+    <div className="min-h-screen bg-gray-950 text-white px-4 md:px-10 py-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-8">
+
+        <div className="h-8 w-64 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+        <div className="h-10 w-28 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+      </div>
+
+      {/* TOGGLE BUTTONS */}
+      <div className="flex gap-3 mb-6">
+
+        <div className="h-10 w-40 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+        <div className="h-10 w-44 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+      </div>
+
+      {/* FORM CARD */}
+      <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+
+        <div className="h-6 w-44 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded mb-6"></div>
+
+        <div className="grid md:grid-cols-3 gap-3 mb-4">
+
+          <div className="h-11 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+          <div className="h-11 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+          <div className="h-11 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+        </div>
+
+        <div className="h-10 w-40 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+      </div>
+
+      {/* VOLUNTEER LIST */}
+      <div className="mt-6 space-y-3">
+
+        {[1, 2, 3, 4].map((item) => (
+          <div
+            key={item}
+            className="bg-gray-900 p-4 rounded flex justify-between items-center border border-gray-800"
+          >
+
+            <div className="space-y-3">
+
+              <div className="h-5 w-40 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+              <div className="h-4 w-56 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+            </div>
+
+            <div className="h-9 w-24 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+          </div>
+        ))}
+
+      </div>
+
+    </div>
+  );
+}
 
   // 🔥 UNIQUE FILTER VALUES
   const roles = [...new Set(event.volunteers.map(v => v.role))];

@@ -98,70 +98,171 @@ const totalVolunteers = event?.volunteers?.length || 0;
     accept: { "image/*": [] },
   });
 
-  if (loading)
-    return <h1 className="text-white text-center mt-10">Loading...</h1>;
+  if (loading) {
+  return (
+    <div className="min-h-screen bg-gray-950 text-white px-4 md:px-10 py-6">
 
+      {/* HEADER */}
+      <div className="border-b border-gray-800 pb-6 mb-8">
+
+        <div className="h-10 w-52 bg-gray-800 rounded-lg mb-3 animate-pulse [animation-duration:2s]"></div>
+
+        <div className="h-4 w-64 bg-gray-800 rounded mb-5 animate-pulse [animation-duration:2s]"></div>
+
+        <div className="flex gap-3 mb-5">
+
+          <div className="h-10 w-48 bg-gray-800 rounded-xl animate-pulse [animation-duration:2s]"></div>
+
+          <div className="h-10 w-12 bg-gray-800 rounded-xl animate-pulse [animation-duration:2s]"></div>
+
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+
+          <div className="h-12 bg-gray-800 rounded-xl animate-pulse [animation-duration:2s]"></div>
+
+          <div className="h-12 bg-gray-800 rounded-xl animate-pulse [animation-duration:2s]"></div>
+
+          <div className="h-12 col-span-2 bg-gray-800 rounded-xl animate-pulse [animation-duration:2s]"></div>
+
+        </div>
+
+      </div>
+
+      {/* MAIN GRID */}
+      <div className="grid lg:grid-cols-2 gap-6">
+
+        {[1, 2, 3, 4].map((item) => (
+          <div
+            key={item}
+            className="bg-gray-900 p-6 rounded-2xl border border-gray-800"
+          >
+
+            <div className="h-7 w-40 bg-gray-800 rounded mb-6 animate-pulse [animation-duration:2s]"></div>
+
+            <div className="space-y-4">
+
+              <div className="h-4 w-full bg-gray-800 rounded animate-pulse [animation-duration:2s]"></div>
+
+              <div className="h-4 w-5/6 bg-gray-800 rounded animate-pulse [animation-duration:2s]"></div>
+
+              <div className="h-11 w-40 bg-gray-800 rounded-xl mt-4 animate-pulse [animation-duration:2s]"></div>
+
+            </div>
+
+          </div>
+        ))}
+
+      </div>
+
+      {/* IMAGE SECTION */}
+      <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800 mt-6">
+
+        <div className="flex justify-between mb-6">
+
+          <div className="h-7 w-40 bg-gray-800 rounded animate-pulse [animation-duration:2s]"></div>
+
+          <div className="h-5 w-10 bg-gray-800 rounded animate-pulse [animation-duration:2s]"></div>
+
+        </div>
+
+        <div className="h-40 bg-gray-800 rounded-xl animate-pulse [animation-duration:2s]"></div>
+
+      </div>
+
+    </div>
+  );
+}
   if (!event)
     return <h1 className="text-white text-center mt-10">No Event Found</h1>;
 
   return (
     <div className="min-h-screen bg-gray-950 text-white px-4 md:px-10 py-6">
       {/* HEADER */}
-      <div className="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-        <div>
-          <h1 className="text-3xl font-bold">{event.eventName}</h1>
-          <p className="text-gray-400">
-            📅 {event.eventDate} | 📍 {event.venue}
-          </p>
+<div className="border-b border-gray-800 pb-6 mb-8">
 
-          {/* COPY ID */}
-          <div className="flex items-center gap-3 mt-2">
-            <p className="text-gray-500 text-sm">ID: {event._id}</p>
+  {/* TOP SECTION */}
+  <div className="flex flex-col gap-5">
 
-            <button
-              onClick={copyEventId}
-              className={`p-2 rounded transition ${
-                copied
-                  ? "bg-orange-600 text-white"
-                  : "bg-gray-800 hover:bg-gray-700 text-orange-500"
-              }`}
-            >
-              {copied ? "✓" : <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    className={`w-5 h-5 transition `}
-  >
-    <rect x="9" y="2" width="6" height="4" rx="1" />
-    <path d="M9 4H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2h-2" />
-  </svg>}
-            </button>
-            <button
-              onClick={() => setShowDeleteModal(true)}
-              className="bg-red-600 px-4 py-2 rounded hover:bg-red-700 ml-3"
-            >
-              Delete Event
-            </button>
-          </div>
-        </div>
+    {/* TITLE + INFO */}
+    <div>
 
-        <div className="dashboardsnavigation">
-          <button
-            onClick={() => navigate(`/event/${id}/ai`)}
-            className="bg-purple-600 px-4 py-2 rounded m-3 hover:bg-purple-700"
+      <h1 className="text-3xl font-bold break-words">
+        {event.eventName}
+      </h1>
+
+      <p className="text-gray-400 mt-2 text-sm md:text-base">
+        📅 {event.eventDate} | 📍 {event.venue}
+      </p>
+
+    </div>
+
+    {/* ID + COPY */}
+    <div className="flex items-center gap-3 flex-wrap">
+
+      <p className="text-gray-500 text-sm break-all">
+        ID: {event._id}
+      </p>
+
+      <button
+        onClick={copyEventId}
+        className={`p-2 rounded-lg transition ${
+          copied
+            ? "bg-orange-600 text-white"
+            : "bg-gray-800 hover:bg-gray-700 text-orange-500"
+        }`}
+      >
+        {copied ? (
+          "✓"
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="w-5 h-5"
           >
-            AI Dashboard
-          </button>
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="bg-orange-600 px-4 py-2 rounded hover:bg-orange-700"
-          >
-            Dashboard
-          </button>
-        </div>
-      </div>
+            <rect x="9" y="2" width="6" height="4" rx="1" />
+            <path d="M9 4H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2h-2" />
+          </svg>
+        )}
+      </button>
+
+    </div>
+
+    {/* ACTION BUTTONS */}
+    <div className="grid grid-cols-2 gap-3">
+
+      {/* AI DASHBOARD */}
+      <button
+        onClick={() => navigate(`/event/${id}/ai`)}
+        className="bg-purple-600 py-3 rounded-xl hover:bg-purple-700 transition text-sm font-medium"
+      >
+        AI Dashboard
+      </button>
+
+      {/* MAIN DASHBOARD */}
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="bg-orange-600 py-3 rounded-xl hover:bg-orange-700 transition text-sm font-medium"
+      >
+        Dashboard
+      </button>
+
+      {/* DELETE */}
+      <button
+        onClick={() => setShowDeleteModal(true)}
+        className="col-span-2 bg-red-600 py-3 rounded-xl hover:bg-red-700 transition text-sm font-medium"
+      >
+        Delete Event
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
       {/* GRID */}
       <div className="grid lg:grid-cols-2 gap-6">
