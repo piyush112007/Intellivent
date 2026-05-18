@@ -11,27 +11,37 @@ function Login() {
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    try {
-      const res = await API.post("/auth/login", {
-        email,
-        password,
-      });
 
-      // 🔥 SAVE USER (MOST IMPORTANT)
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ user: res.data.user })
-      );
+  try {
 
-      console.log("LOGGED IN USER:", res.data.user);
+    const res = await API.post("/auth/login", {
+      email,
+      password,
+    });
 
-      navigate("/dashboard");
+    // 🔥 SAVE TOKEN
+    localStorage.setItem("token", res.data.token);
 
-    } catch (err) {
-      console.log(err);
-      alert("Login failed");
-    }
-  };
+    // 🔥 SAVE USER
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ user: res.data.user })
+    );
+
+    console.log("TOKEN:", res.data.token);
+    console.log("LOGGED IN USER:", res.data.user);
+
+    navigate("/dashboard");
+
+  } catch (err) {
+
+    console.log(err);
+
+    alert("Login failed");
+
+  }
+
+};
 
   return (
     <div
