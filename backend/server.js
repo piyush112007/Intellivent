@@ -24,7 +24,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://intellivent.vercel.app",
-      "https://intelliventfrontend-git-features-piyush112007s-projects.vercel.app",
+      "https://intelliventfrontend-git-features-piyush112007s-projects.vercel.app/",
     ],
     credentials: true,
   }),
