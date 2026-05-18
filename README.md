@@ -1,8 +1,6 @@
-
-
 # 🚀 IntelliVent
 
-### 🧠 AI-Powered Event Report Generator
+### 🧠 AI-Powered Event Management & Report Generation Platform
 
 ![Status](https://img.shields.io/badge/Status-Active-success)
 ![Tech](https://img.shields.io/badge/Stack-MERN-blue)
@@ -13,63 +11,109 @@
 
 ## 📌 Overview
 
-**IntelliVent** is an AI-powered web application that automates the creation of professional event reports.
-It transforms raw event data into structured, well-formatted reports including **overview, conclusion, and complete documentation**.
+**IntelliVent** is a full-stack AI-powered event management platform designed to simplify the planning, organization, and documentation of events.
 
-Designed for **colleges, clubs, and organizations**, IntelliVent reduces manual effort and ensures consistency in reporting.
+The platform enables users to:
 
----
+- Create and manage events
+- Organize sub-events
+- Track budgets and expenses
+- Manage volunteers
+- Upload event images
+- Generate AI-powered event reports
 
-## ✨ Key Features
-
-### 🤖 AI Report Generation
-
-* Generate **event overview**, **conclusion**, or **full report**
-* Uses advanced AI models via OpenRouter
-
-### 📄 PDF Export
-
-* Instantly download structured reports in PDF format
-
-### 👥 Project Collaboration
-
-* Create projects with unique codes
-* Share and manage reports within a team
-
-### 🎨 Modern UI
-
-* Responsive and clean interface
-* Built for simplicity and usability
+IntelliVent is built for **colleges, clubs, organizations, and teams** that want a modern system for collaborative event handling and automated documentation.
 
 ---
 
-## ⚙️ Tech Stack
+# ✨ Features
 
-| Category       | Technology                        |
-| -------------- | --------------------------------- |
-| Frontend       | React.js, Tailwind CSS            |
-| Backend        | Node.js, Express.js               |
-| Database       | MongoDB                           |
-| AI Integration | OpenRouter  |
+## 🎯 Event Management
+
+- Create and manage events
+- Nested sub-event support
+- Event sharing via unique Event ID
+- Collaborative access system
+
+## 👥 Volunteer Management
+
+- Add single or multiple volunteers
+- Track volunteer roles and departments
+
+## 💰 Budget Management
+
+- Manage allocated budgets
+- Add and track expenses
+- Live remaining budget calculation
+
+## 📝 Event Planning
+
+- Add and edit event plans
+- Structured heading-based planning system
+
+## 🖼️ Image Management
+
+- Upload event images
+- Drag-and-drop image support
+- Event gallery management
+
+## 🤖 AI Integration
+
+Generate:
+- Event Overview
+- Event Conclusion
+- Full Event Report
+
+Powered using **OpenRouter AI APIs**
+
+## 🔐 Authentication System
+
+- JWT-based authentication
+- Secure password hashing using bcrypt
+- Protected routes and authorization middleware
+
+## 🎨 Modern UI/UX
+
+- Fully responsive design
+- Dark themed dashboard
+- Skeleton loaders and smooth transitions
+- Optimized for desktop and mobile
 
 ---
 
-## 🏗️ Project Structure
+# ⚙️ Tech Stack
+
+| Category | Technology |
+|---|---|
+| Frontend | React.js, Tailwind CSS |
+| Backend | Node.js, Express.js |
+| Database | MongoDB |
+| Authentication | JWT, bcrypt |
+| AI Integration | OpenRouter API |
+| Deployment | Vercel |
+
+---
+
+# 🏗️ Project Structure
 
 ```bash
 IntelliVent/
-│── frontend/
+│
+├── frontend/
 │   ├── components/
 │   ├── pages/
-│   └── services/
+│   ├── services/
+│   └── assets/
 │
-│── backend/
-│   ├── routes/
-│   ├── models/
+├── backend/
+│   ├── config/
 │   ├── controllers/
-│   └── middleware/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   └── utils/
 │
-│── README.md
+└── README.md
 ```
 
 ---
@@ -108,8 +152,11 @@ npm start
 Create a `.env` file inside backend:
 
 ```env
-MONGO_URI=your_mongodb_connection
-OPENROUTER_API_KEY=your_api_key
+MONGO_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_jwt_secret
+
+OPENROUTER_API_KEY=your_openrouter_api_key
 ```
 
 ---
@@ -118,37 +165,73 @@ OPENROUTER_API_KEY=your_api_key
 
 ```mermaid
 graph TD
-A[User Inputs Event Data] --> B[Send to Backend]
-B --> C[AI Processing via OpenRouter]
-C --> D[Generate Report Content]
-D --> E[Convert to PDF]
-E --> F[Download / View Report]
+
+A[User Login/Register]
+--> B[Create or Join Event]
+
+B --> C[Manage Budget]
+B --> D[Manage Volunteers]
+B --> E[Manage Event Plans]
+B --> F[Upload Images]
+
+C --> G[AI Report Generation]
+D --> G
+E --> G
+F --> G
+
+G --> H[Generate Structured Report]
 ```
 
 ---
-##DataBase Structure
+## DataBase Structure
 ```mermaid
 erDiagram
 
 USER ||--o{ EVENT : creates
+EVENT ||--o{ EVENT : subEvents
 
 USER {
-  string userId
+  string _id
   string name
   string email
+  string password
 }
 
 EVENT {
-  string eventId
-  string title
+  string _id
+  string eventName
   string description
+  string venue
+  number allocatedBudget
   date eventDate
-  string participants
-  string reportStatus
 }
+
+BUDGET_COLLECTION {
+  string _id
+  number allocatedBudget
+}
+
+EVENT ||--|| BUDGET_COLLECTION : has
 ```
 ---
+## 🔐 Authentication Flow
+```mermaid
+sequenceDiagram
 
+participant User
+participant Frontend
+participant Backend
+participant MongoDB
+
+User->>Frontend: Login Request
+Frontend->>Backend: Send Credentials
+Backend->>MongoDB: Verify User
+MongoDB-->>Backend: User Data
+Backend->>Backend: Generate JWT
+Backend-->>Frontend: Token + User
+Frontend->>Frontend: Store Token
+```
+---
 ## 🚫 Limitations
 
 * No PPT generation
@@ -159,19 +242,20 @@ EVENT {
 
 ## 🔮 Future Scope
 
-* 📊 PowerPoint (PPT) generation
-* 🎨 Custom report templates
+* 📊 PPT generation
+* 📱 Mobile application
 * 📈 Analytics dashboard
-* 🧠 Multi-model AI comparison
-* ☁️ Cloud deployment
-
+* 🎨 Custom templates
+* 🤝 Real-time collaboration
+* ☁️ Cloud media storage
+* 🧠 Multi-model AI support
 ---
 
 ## 👨‍💻 Team Members
 
 * Janhavi Mishra  – Frontend Developer(https://github.com/Janhavi2126)
 * Piyushkumar Singh  – Backend Developer
-* Hariom Rai  – AI Integration
+* Yash Verma  – AI Integration
 
 
 ---
@@ -181,15 +265,11 @@ EVENT {
 ## 🤝 Contribution
 
 Contributions are welcome!
-Feel free to fork the repo and submit a pull request.
+1. Fork the repository
+2. Create a feature branch
+3. Commit changes
+4. Open a Pull Request
 
----
-
-## 📜 License
-
-This project is licensed under the **MIT License**.
-
----
 
 ## ⭐ Support
 
