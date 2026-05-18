@@ -666,8 +666,77 @@ const mockSubEvents = [
     }
   };
 
-  if (!event)
-    return <h1 className="text-white text-center mt-10">Loading...</h1>;
+  if (!event) {
+  return (
+    <div className="min-h-screen bg-gray-950 text-white px-6 py-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between mb-8">
+
+        <div>
+          <div className="h-8 w-64 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded mb-3"></div>
+
+          <div className="h-4 w-40 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+        </div>
+
+        <div className="h-10 w-24 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+      </div>
+
+      {/* MAIN CARD */}
+      <div className="bg-gray-900 p-6 rounded-xl border border-gray-800">
+
+        {/* BUTTONS */}
+        <div className="flex gap-4 mb-6">
+
+          <div className="h-10 w-44 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+          <div className="h-10 w-48 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+        </div>
+
+        {/* PDF BUTTON */}
+        <div className="h-12 w-full bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+      </div>
+
+      {/* OUTPUT CARDS */}
+      <div className="mt-6 space-y-4">
+
+        {[1, 2].map((item) => (
+          <div
+            key={item}
+            className="bg-gray-900 p-4 rounded border border-gray-800"
+          >
+
+            {/* HEADER */}
+            <div className="flex justify-between items-center mb-4">
+
+              <div className="h-5 w-32 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+              <div className="h-8 w-8 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+            </div>
+
+            {/* TEXT */}
+            <div className="space-y-3">
+
+              <div className="h-4 w-full bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+              <div className="h-4 w-5/6 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+              <div className="h-4 w-4/6 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+            </div>
+
+          </div>
+        ))}
+
+      </div>
+
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen bg-gray-950 text-white px-6 py-6">

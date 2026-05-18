@@ -65,8 +65,72 @@ function EventPlanDashboard() {
   };
 
   if (loading) {
-    return <h1 className="text-white text-center mt-10">Loading...</h1>;
-  }
+  return (
+    <div className="min-h-screen bg-gray-950 text-white px-4 md:px-10 py-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-8">
+
+        <div className="h-8 w-72 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+        <div className="h-10 w-28 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+      </div>
+
+      {/* TOGGLE BUTTONS */}
+      <div className="flex gap-3 mb-6">
+
+        <div className="h-10 w-32 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+        <div className="h-10 w-32 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+      </div>
+
+      {/* FORM CARD */}
+      <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800 mb-6">
+
+        <div className="h-6 w-40 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded mb-6"></div>
+
+        {/* INPUT */}
+        <div className="h-11 w-full bg-gray-800/70 animate-pulse [animation-duration:2s] rounded mb-3"></div>
+
+        {/* TEXTAREA */}
+        <div className="h-32 w-full bg-gray-800/70 animate-pulse [animation-duration:2s] rounded mb-4"></div>
+
+        {/* BUTTON */}
+        <div className="h-10 w-36 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+      </div>
+
+      {/* PLAN LIST */}
+      <div className="space-y-3">
+
+        <div className="h-6 w-32 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded mb-4"></div>
+
+        {[1, 2, 3, 4].map((item) => (
+          <div
+            key={item}
+            className="bg-gray-900 p-4 rounded-xl border border-gray-800 flex justify-between items-center"
+          >
+
+            <div className="space-y-3 flex-1">
+
+              <div className="h-5 w-40 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+              <div className="h-4 w-5/6 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded"></div>
+
+            </div>
+
+            <div className="h-9 w-24 bg-gray-800/70 animate-pulse [animation-duration:2s] rounded ml-4"></div>
+
+          </div>
+        ))}
+
+      </div>
+
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen bg-gray-950 text-white px-4 md:px-10 py-6">

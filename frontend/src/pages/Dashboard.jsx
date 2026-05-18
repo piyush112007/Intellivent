@@ -72,45 +72,81 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-950 text-white px-4 md:px-10 py-6">
       {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4 border-b border-gray-800 pb-4">
+      <div className="flex items-start justify-between mb-8 border-b border-gray-800 pb-4">
+        {/* LEFT */}
         <div>
           <div className="flex items-center gap-3">
-            {/* LOGO */}
             <img
               src={logo}
               alt="IntelliVent Logo"
-              className="w-10 h-10 object-contain hover:cursor-pointer "
+              className="w-10 h-10 object-contain"
             />
 
-            {/* TEXT */}
-            <h1 className="text-3xl font-bold text-orange-600 tracking-wide hover:cursor-pointer ">
+            <h1 className="text-3xl font-bold text-orange-600 tracking-wide">
               IntelliVent
             </h1>
           </div>
-          <p className="text-gray-400 text-sm hover:cursor-pointer ">
+
+          <p className="text-gray-400 text-sm mt-2">
             Welcome back, {user.name} 👋
           </p>
         </div>
 
-        <div className="flex gap-3">
-          {/* CREATE EVENT */}
+        {/* RIGHT BUTTONS */}
+        <div className="flex gap-2">
+          {/* CREATE */}
           <button
             onClick={() => navigate("/create-event")}
-            className="bg-orange-600 px-6 py-2 rounded-lg hover:bg-orange-700 transition"
+            className="
+        w-12 h-12
+        rounded-xl
+        bg-orange-600
+        hover:bg-orange-700
+        transition
+        flex items-center justify-center
+        text-white
+        text-4xl
+        leading-none
+        pb-1
+        flex-shrink-0
+      "
           >
-            + Create Event
+            +
           </button>
 
           {/* LOGOUT */}
           <button
             onClick={handleLogout}
-            className="px-5 py-2 rounded-lg bg-gray-800 border border-gray-700 hover:bg-red-600 hover:border-red-500 transition text-gray-300 hover:text-white"
+            className="
+        w-12 h-12
+        rounded-xl
+        bg-gray-800
+        border border-gray-700
+        hover:bg-red-600
+        hover:border-red-500
+        transition
+        flex items-center justify-center
+        text-gray-300 hover:text-white
+        flex-shrink-0
+      "
           >
-            Logout
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m-3-3h9m0 0l-3-3m3 3l-3 3"
+              />
+            </svg>
           </button>
         </div>
       </div>
-
       {/* JOIN EVENT */}
       <div className="bg-gray-900 p-6 rounded-2xl shadow-md mb-10 border border-gray-800">
         <h2 className="text-lg font-semibold mb-4">Join Event</h2>
@@ -147,25 +183,41 @@ function Dashboard() {
         </p>
 
         {/* 🔥 SKELETON LOADER */}
-        {loading ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((item) => (
-              <div
-                key={item}
-                className="bg-gray-900 p-5 rounded-2xl border border-gray-800 animate-pulse"
-              >
-                {/* TITLE */}
-                <div className="h-5 w-40 bg-gray-700 rounded mb-4"></div>
+{loading ? (
+  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                {/* DATE */}
-                <div className="h-4 w-28 bg-gray-800 rounded mb-3"></div>
+    {[1, 2, 3].map((item) => (
+      <div
+        key={item}
+        className="bg-gray-900 p-5 rounded-2xl border border-gray-800"
+      >
 
-                {/* VENUE */}
-                <div className="h-4 w-32 bg-gray-800 rounded"></div>
-              </div>
-            ))}
-          </div>
-        ) : events.length === 0 ? (
+        {/* TITLE */}
+        <div className="h-6 w-36 bg-gray-800/80 rounded-lg mb-5 animate-pulse [animation-duration:2s]"></div>
+
+        {/* DATE */}
+        <div className="flex items-center gap-2 mb-3">
+
+          <div className="w-4 h-4 bg-gray-800/80 rounded animate-pulse [animation-duration:2s]"></div>
+
+          <div className="h-4 w-28 bg-gray-800/80 rounded animate-pulse [animation-duration:2s]"></div>
+
+        </div>
+
+        {/* VENUE */}
+        <div className="flex items-center gap-2">
+
+          <div className="w-4 h-4 bg-gray-800/80 rounded animate-pulse [animation-duration:2s]"></div>
+
+          <div className="h-4 w-32 bg-gray-800/80 rounded animate-pulse [animation-duration:2s]"></div>
+
+        </div>
+
+      </div>
+    ))}
+
+  </div>
+) : events.length === 0 ? (
           <div className="bg-gray-900 p-8 rounded-xl text-center text-gray-400 border border-gray-800">
             No events yet 🚀
           </div>
