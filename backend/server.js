@@ -45,4 +45,4 @@ app.use("/api/budget", budgetRoutes);
 app.use("/api/ai", aiRoutes);
 
 // 🔥 EXPORT FOR VERCEL
-export default app;
+module.exports = app;
