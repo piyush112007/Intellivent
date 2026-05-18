@@ -1,11 +1,25 @@
 const express = require("express");
 const router = express.Router();
 
-const { addExpense, getBudgetSummary, deleteExpense } = require("../controllers/budgetController");
+const {
+  addExpense,
+  getBudgetSummary,
+  deleteExpense,
+} = require("../controllers/budgetController");
 
-router.post("/:eventId/add-expense", addExpense);
+// 🔥 IMPORT AUTH MIDDLEWARE
+const authMiddleware = require("../middleware/authMiddleware");
 
-router.get("/:eventId/budget-summary", getBudgetSummary);
-router.delete("/:eventId/expense/:transactionId", deleteExpense);
+// 🔥 PROTECTED ROUTES
+
+router.post("/:eventId/add-expense", authMiddleware, addExpense);
+
+router.get("/:eventId/budget-summary", authMiddleware, getBudgetSummary);
+
+router.delete(
+  "/:eventId/expense/:transactionId",
+  authMiddleware,
+  deleteExpense,
+);
 
 module.exports = router;

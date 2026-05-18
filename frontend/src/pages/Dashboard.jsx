@@ -41,9 +41,19 @@ function Dashboard() {
       alert("Invalid Event ID");
     }
   };
-const handleLogout = () => {
-  localStorage.removeItem("user");
-  navigate("/");
+const handleLogout = async () => {
+
+  try {
+
+    await API.post("/auth/logout");
+
+    localStorage.removeItem("user");
+
+    navigate("/");
+
+  } catch (err) {
+    console.log(err);
+  }
 };
   if (!user) return <h1 className="text-center text-white mt-10">Login first</h1>;
 
